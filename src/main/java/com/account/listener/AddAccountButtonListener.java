@@ -1,41 +1,42 @@
 package com.account.listener;
 
+import com.account.AccountDao;
 import com.account.table.AccountTable;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import static com.account.listener.AddAccountButtonListener.ADD_ACCOUNT_BUTTON_LISTENER_BEAN_NAME;
 
-@Component("addAccountButtonListener")
+@Component(ADD_ACCOUNT_BUTTON_LISTENER_BEAN_NAME)
 public class AddAccountButtonListener implements ActionListener {
 
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private JTextField input;
     private AccountTable accountTable;
+    private AccountDao accountDao;
+    public static final String ADD_ACCOUNT_BUTTON_LISTENER_BEAN_NAME = "addAccountButtonListener";
 
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
-            addAccount(input.getText());
+            accountDao.addAccount(validateAndGet());
             accountTable.refreshModel();
 
-        } catch (Exception e1) {
-            String formattedString = String.format("Account %s doesn't create.May by it exist", input.getText());
+        } catch(IllegalArgumentException e1) {
+            JOptionPane.showMessageDialog(null, e1.getMessage());
+        }
+        catch (Exception e1) {
+            String formattedString = String.format("Account %s can not be created.May by it exist", input.getText());
             JOptionPane.showMessageDialog(null, formattedString);
         }
     }
 
-    public void addAccount(String accountName) {
-        String query = "insert into account (account_name) value (:p_account_name)";
-        SqlParameterSource namedParameter = new MapSqlParameterSource("p_account_name", accountName);
-        namedParameterJdbcTemplate.update(query, namedParameter);
-    }
-
-    public void setNamedParameterJdbcTemplate(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    public String validateAndGet() {
+        if (input.getText().trim().isEmpty()) {
+            throw new IllegalArgumentException("You don't enter account name!");
+        }
+        return input.getText();
     }
 
     public void setInput(JTextField input) {
@@ -44,5 +45,10 @@ public class AddAccountButtonListener implements ActionListener {
 
     public void setAccountTable(AccountTable accountTable) {
         this.accountTable = accountTable;
+    }
+
+    @Autowired
+    public void setAccountDao(AccountDao accountDao) {
+        this.accountDao = accountDao;
     }
 }

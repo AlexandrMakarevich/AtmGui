@@ -15,8 +15,8 @@ public class AccountTable extends JTable {
 
     public AccountTable(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-        accountTableModel.setAccountList(getAllAccounts());
         setModel(accountTableModel);
+        refreshModel();
     }
 
     public List<Account> getAllAccounts() {

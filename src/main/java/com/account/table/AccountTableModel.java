@@ -2,18 +2,13 @@ package com.account.table;
 
 import com.account.Account;
 import javax.swing.table.AbstractTableModel;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AccountTableModel extends AbstractTableModel {
 
-    private List<String> columnName = new ArrayList<>();
+    private List<String> columnName = Arrays.asList(new String[]{"id", "Account name"});
     private List<Account> accountList;
-
-    public AccountTableModel() {
-        columnName.add("id");
-        columnName.add("Account name");
-    }
 
     @Override
     public int getRowCount() {
