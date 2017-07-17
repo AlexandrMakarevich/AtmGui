@@ -1,39 +1,30 @@
 package com.account.table;
 
-import com.account.Account;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import com.account.AccountDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import javax.swing.*;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
+import static com.account.table.AccountTable.ACCOUNT_TABLE_BEAN_NAME;
 
+@Component(ACCOUNT_TABLE_BEAN_NAME)
 public class AccountTable extends JTable {
 
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    private AccountTableModel accountTableModel = new AccountTableModel();
-
-    public AccountTable(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-        setModel(accountTableModel);
-        refreshModel();
-    }
-
-    public List<Account> getAllAccounts() {
-        String query = "select * from account";
-        return namedParameterJdbcTemplate.query(query, new RowMapper<Account>() {
-            @Override
-            public Account mapRow(ResultSet rs, int rowNum) throws SQLException {
-                Account account = new Account();
-                account.setId(rs.getInt(1));
-                account.setAccountName(rs.getString(2));
-                return account;
-            }
-        });
-    }
+    private AccountTableModel accountTableModel;
+    private AccountDao accountDao;
+    public static final String ACCOUNT_TABLE_BEAN_NAME = "accountTable";
 
     public void refreshModel() {
-        accountTableModel.setAccountList(getAllAccounts());
+        accountTableModel.setAccountList(accountDao.getAllAccounts());
         accountTableModel.fireTableDataChanged();
+    }
+
+    @Autowired
+    public void setAccountTableModel(AccountTableModel accountTableModel) {
+        this.accountTableModel = accountTableModel;
+    }
+
+    @Autowired
+    public void setAccountDao(AccountDao accountDao) {
+        this.accountDao = accountDao;
     }
 }
