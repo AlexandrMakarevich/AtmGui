@@ -1,19 +1,18 @@
 package com.account.table;
 
 import com.account.Account;
+import org.springframework.stereotype.Component;
 import javax.swing.table.AbstractTableModel;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import static com.account.table.AccountTableModel.ACCOUNT_TABLE_MODEL_BEAN_NAME;
 
+@Component(ACCOUNT_TABLE_MODEL_BEAN_NAME)
 public class AccountTableModel extends AbstractTableModel {
 
-    private List<String> columnName = new ArrayList<>();
+    private List<String> columnName = Arrays.asList(new String[]{"id", "Account name"});
     private List<Account> accountList;
-
-    public AccountTableModel() {
-        columnName.add("id");
-        columnName.add("Account name");
-    }
+    public static final String ACCOUNT_TABLE_MODEL_BEAN_NAME = "accountTableModel";
 
     @Override
     public int getRowCount() {

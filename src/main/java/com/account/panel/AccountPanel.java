@@ -1,43 +1,32 @@
 package com.account.panel;
 
-import com.account.listener.AddAccountButtonListener;
-import com.account.listener.DeleteAccountButtonListener;
 import com.account.table.AccountTable;
+import com.account.table.AccountTableModel;
 import org.springframework.context.ApplicationContext;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import javax.swing.*;
 import java.awt.*;
+import static com.account.table.AccountTable.ACCOUNT_TABLE_BEAN_NAME;
+import static com.account.table.AccountTableModel.ACCOUNT_TABLE_MODEL_BEAN_NAME;
 
 public class AccountPanel extends JPanel {
 
-    private FlowLayout accountLayout = new FlowLayout();
-    private JLabel accountLabel = new JLabel("Enter account name");
-    private JTextField accountInput = new JTextField("" , 5);
-    private JButton addAccountButton = new JButton("Add account");
-    private JButton deleteAccountButton = new JButton("Delete");
-    private AddAccountButtonListener addAccountButtonListener;
+    private BorderLayout borderLayout = new BorderLayout();
     private AccountTable accountTable;
+    private AccountTableModel accountTableModel;
+    private InputAndButtonPanel inputAndButtonPanel;
 
-    public AccountPanel (ApplicationContext applicationContext) {
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate =
-                (NamedParameterJdbcTemplate) applicationContext.getBean("namedParameterJdbcTemplate");
-        setLayout(accountLayout);
-        add(accountLabel);
-        add(accountInput);
-        add(addAccountButton);
-        add(deleteAccountButton);
-        addAccountButtonListener = new AddAccountButtonListener();
-        addAccountButtonListener.setInput(accountInput);
-        addAccountButtonListener.setNamedParameterJdbcTemplate(namedParameterJdbcTemplate);
-        addAccountButton.addActionListener(addAccountButtonListener);
-        accountTable = new AccountTable(namedParameterJdbcTemplate);
+    public AccountPanel(ApplicationContext applicationContext) {
+        setLayout(borderLayout);
+        accountTable = (AccountTable) applicationContext.getBean(ACCOUNT_TABLE_BEAN_NAME);
+        accountTableModel = (AccountTableModel) applicationContext.getBean(ACCOUNT_TABLE_MODEL_BEAN_NAME);
+        accountTable.setModel(accountTableModel);
+        accountTable.refreshModel();
         JScrollPane jScrollPane = new JScrollPane();
         jScrollPane.setViewportView(accountTable);
-        add(jScrollPane);
-        addAccountButtonListener.setAccountTable(accountTable);
-        DeleteAccountButtonListener deleteAccountButtonListener =
-                (DeleteAccountButtonListener) applicationContext.getBean("deleteAccountButtonListener");
-        deleteAccountButtonListener.setAccountTable(accountTable);
-        deleteAccountButton.addActionListener(deleteAccountButtonListener);
+        add(jScrollPane, BorderLayout.CENTER);
+        inputAndButtonPanel = new InputAndButtonPanel(applicationContext);
+        inputAndButtonPanel.getAddAccountButtonListener().setAccountTable(accountTable);
+        inputAndButtonPanel.getDeleteAccountButtonListener().setAccountTable(accountTable);
+        add(inputAndButtonPanel,BorderLayout.PAGE_START);
     }
 }
