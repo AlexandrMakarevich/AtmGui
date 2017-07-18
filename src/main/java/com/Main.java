@@ -16,9 +16,9 @@ public class Main {
         jTabbedPane.addTab("Account", accountPanel);
         jTabbedPane.addTab("Currency", currencyPanel);
         JFrame jFrame = new JFrame();
-        jFrame.setBounds(10, 10,450, 300);
+        jFrame.setSize(150, 200);
         jFrame.setContentPane(jTabbedPane);
-//        jFrame.pack();
+        jFrame.pack();
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         jFrame.setVisible(true);
     }
