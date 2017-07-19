@@ -19,7 +19,7 @@ public class InputAndButtonPanel extends JPanel {
     private DeleteAccountButtonListener deleteAccountButtonListener;
 
     public InputAndButtonPanel(ApplicationContext applicationContext) {
-        addComponentsOnPanel(applicationContext);
+        addComponentsOnPanel();
         addAccountButtonListener = (AddAccountButtonListener)
                 applicationContext.getBean(ADD_ACCOUNT_BUTTON_LISTENER_BEAN_NAME);
         deleteAccountButtonListener =
@@ -27,7 +27,7 @@ public class InputAndButtonPanel extends JPanel {
         initAndAddListener();
     }
 
-    public void addComponentsOnPanel(ApplicationContext applicationContext) {
+    public void addComponentsOnPanel() {
         setLayout(accountLayout);
         add(accountLabel);
         add(accountInput);

@@ -1,53 +1,30 @@
 package com.currency.table;
 
-import com.currency.Currency;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import com.currency.CurrencyDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import javax.swing.*;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
+import static com.currency.table.CurrencyTable.CURRENCY_TABLE;
 
+@Component(CURRENCY_TABLE)
 public class CurrencyTable extends JTable {
 
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-    public CurrencyTable(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-        init();
-        setColumnWidth();
-    }
-
-    private CurrencyTableModel currencyTableModel = new CurrencyTableModel();
-
-    private void init() {
-        List<Currency> currencyList = getAllCurrency();
-        currencyTableModel.setCurrencyList(currencyList);
-        setModel(currencyTableModel);
-    }
-
-    public List<Currency> getAllCurrency() {
-        String query = "select * from currency";
-        List<Currency> currencyList = namedParameterJdbcTemplate.query(query, new RowMapper<Currency>() {
-            @Override
-            public Currency mapRow(ResultSet resultSet, int i) throws SQLException {
-                Currency currency = new Currency();
-                currency.setCurrencyName(resultSet.getString(2));
-                currency.setId(resultSet.getInt(1));
-                return currency;
-            }
-        });
-        return currencyList;
-    }
-
-    public void setColumnWidth() {
-        setSize(60, 100);
-        getColumnModel().getColumn(0).setWidth(10);
-        getColumnModel().getColumn(1).setWidth(50);
-    }
+    private CurrencyTableModel currencyTableModel;
+    private CurrencyDao currencyDao;
+    public static final String CURRENCY_TABLE = "currencyTable";
 
     public void refreshModel() {
-        currencyTableModel.setCurrencyList(getAllCurrency());
+        currencyTableModel.setCurrencyList(currencyDao.getAllCurrency());
         currencyTableModel.fireTableDataChanged();
+    }
+
+    @Autowired
+    public void setCurrencyTableModel(CurrencyTableModel currencyTableModel) {
+        this.currencyTableModel = currencyTableModel;
+    }
+
+    @Autowired
+    public void setCurrencyDao(CurrencyDao currencyDao) {
+        this.currencyDao = currencyDao;
     }
 }
