@@ -18,7 +18,7 @@ public class AddCurrencyButtonListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
        try{
-           currencyDao.insertCurrency(currencyDao.validateAndGet(input.getText()));
+           currencyDao.insertCurrency(validateAndGet(input.getText()));
            currencyTable.refreshModel();
        }catch(IllegalArgumentException e1) {
            JOptionPane.showMessageDialog(null, e1.getMessage());
@@ -27,6 +27,13 @@ public class AddCurrencyButtonListener implements ActionListener {
            String formattedString = String.format("Currency %s can not be created.May by it exist", input.getText());
            JOptionPane.showMessageDialog(null, formattedString);
        }
+    }
+
+    public String validateAndGet(String input) {
+        if (input.trim().isEmpty()) {
+            throw new IllegalArgumentException("You don't enter account name!");
+        }
+        return input;
     }
 
     @Autowired

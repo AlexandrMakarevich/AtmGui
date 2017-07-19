@@ -52,22 +52,6 @@ public class CurrencyDaoImpl implements CurrencyDao {
         namedParameterJdbcTemplate.update(query, namedParameter);
     }
 
-    @Override
-    public Integer validateAndCreate(Integer currencyId) {
-        if (currencyId == null) {
-            throw new IllegalArgumentException("Column is empty!");
-        }
-        return currencyId;
-    }
-
-    @Override
-    public String validateAndGet(String input) {
-        if (input.trim().isEmpty()) {
-            throw new IllegalArgumentException("You don't enter account name!");
-        }
-        return input;
-    }
-
     @Autowired
     public void setNamedParameterJdbcTemplate(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;

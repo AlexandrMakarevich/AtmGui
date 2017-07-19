@@ -17,7 +17,7 @@ public class DeleteCurrencyButtonListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
-            int currencyId = currencyDao.validateAndCreate
+            int currencyId = validateAndCreate
                     ((Integer)currencyTable.getValueAt(currencyTable.getSelectedRow(), 0));
             currencyDao.deleteCurrency(currencyId);
             currencyTable.refreshModel();
@@ -26,6 +26,13 @@ public class DeleteCurrencyButtonListener implements ActionListener {
         } catch (Exception e1) {
             JOptionPane.showMessageDialog(null, e1.getMessage());
         }
+    }
+
+    public Integer validateAndCreate(Integer currencyId) {
+        if (currencyId == null) {
+            throw new IllegalArgumentException("Column is empty!");
+        }
+        return currencyId;
     }
 
     @Autowired

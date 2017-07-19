@@ -10,7 +10,4 @@ public interface CurrencyDao {
 
     void deleteCurrency(int currencyId);
 
-    Integer validateAndCreate(Integer currencyId);
-
-    String validateAndGet(String input);
 }
