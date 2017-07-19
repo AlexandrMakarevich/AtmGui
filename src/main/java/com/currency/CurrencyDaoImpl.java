@@ -1,13 +1,11 @@
 package com.currency;
 
-import com.currency.table.CurrencyTable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Component;
-import javax.swing.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -55,19 +53,19 @@ public class CurrencyDaoImpl implements CurrencyDao {
     }
 
     @Override
-    public int validateAndCreate(CurrencyTable currencyTable) {
-        if (currencyTable.getValueAt(currencyTable.getSelectedRow(), 0) == null) {
+    public Integer validateAndCreate(Integer currencyId) {
+        if (currencyId == null) {
             throw new IllegalArgumentException("Column is empty!");
         }
-        return (Integer) currencyTable.getValueAt(currencyTable.getSelectedRow(), 0);
+        return currencyId;
     }
 
     @Override
-    public String validateAndGet(JTextField input) {
-        if (input.getText().trim().isEmpty()) {
+    public String validateAndGet(String input) {
+        if (input.trim().isEmpty()) {
             throw new IllegalArgumentException("You don't enter account name!");
         }
-        return input.getText();
+        return input;
     }
 
     @Autowired

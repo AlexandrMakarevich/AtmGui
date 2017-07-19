@@ -17,7 +17,8 @@ public class DeleteCurrencyButtonListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
-            int currencyId = currencyDao.validateAndCreate(currencyTable);
+            int currencyId = currencyDao.validateAndCreate
+                    ((Integer)currencyTable.getValueAt(currencyTable.getSelectedRow(), 0));
             currencyDao.deleteCurrency(currencyId);
             currencyTable.refreshModel();
         } catch (ArrayIndexOutOfBoundsException e1) {

@@ -18,7 +18,7 @@ public class AddCurrencyButtonListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
        try{
-           currencyDao.insertCurrency(currencyDao.validateAndGet(input));
+           currencyDao.insertCurrency(currencyDao.validateAndGet(input.getText()));
            currencyTable.refreshModel();
        }catch(IllegalArgumentException e1) {
            JOptionPane.showMessageDialog(null, e1.getMessage());

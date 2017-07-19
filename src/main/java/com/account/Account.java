@@ -20,4 +20,12 @@ public class Account {
     public void setId(int id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "accountName='" + accountName + '\'' +
+                ", id=" + id +
+                '}';
+    }
 }

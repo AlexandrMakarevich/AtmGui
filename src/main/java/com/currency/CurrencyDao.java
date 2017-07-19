@@ -1,8 +1,5 @@
 package com.currency;
 
-import com.currency.table.CurrencyTable;
-
-import javax.swing.*;
 import java.util.List;
 
 public interface CurrencyDao {
@@ -13,7 +10,7 @@ public interface CurrencyDao {
 
     void deleteCurrency(int currencyId);
 
-    int validateAndCreate(CurrencyTable currencyTable);
+    Integer validateAndCreate(Integer currencyId);
 
-    String validateAndGet(JTextField input);
+    String validateAndGet(String input);
 }
