@@ -1,42 +1,32 @@
 package com.currency.panel;
 
-import com.currency.listener.AddCurrencyButtonListener;
-import com.currency.listener.DeleteCurrencyButtonListener;
 import com.currency.table.CurrencyTable;
+import com.currency.table.CurrencyTableModel;
 import org.springframework.context.ApplicationContext;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import javax.swing.*;
 import java.awt.*;
+import static com.currency.table.CurrencyTable.CURRENCY_TABLE;
+import static com.currency.table.CurrencyTableModel.CURRENCY_TABLE_MODEL;
 
 public class CurrencyPanel extends JPanel {
 
-    private JButton currencyButton = new JButton("Add currency");
-    private JButton deleteButton = new JButton("Delete");
-    private JLabel currencyLabel = new JLabel("Enter currency name");
-    private FlowLayout currencyLayout = new FlowLayout();
-    private JTextField input = new JTextField("", 5);
-    private CurrencyTable table;
+    private BorderLayout borderLayout = new BorderLayout();
+    private CurrencyInputAndButtonPanel currencyInputAndButtonPanel;
+    private CurrencyTable currencyTable;
+    private CurrencyTableModel currencyTableModel;
 
-    public CurrencyPanel(ApplicationContext applicationContext) {
-        setLayout(currencyLayout);
-        add(currencyLabel);
-        add(input);
-        add(currencyButton);
-        add(deleteButton);
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate =
-                (NamedParameterJdbcTemplate) applicationContext.getBean("namedParameterJdbcTemplate");
-        table = new CurrencyTable(namedParameterJdbcTemplate);
+    public CurrencyPanel (ApplicationContext applicationContext) {
+        setLayout(borderLayout);
+        currencyTable = (CurrencyTable) applicationContext.getBean(CURRENCY_TABLE);
+        currencyTableModel = (CurrencyTableModel) applicationContext.getBean(CURRENCY_TABLE_MODEL);
+        currencyTable.setModel(currencyTableModel);
+        currencyTable.refreshModel();
         JScrollPane jScrollPane = new JScrollPane();
-        jScrollPane.setViewportView(table);
-        add(jScrollPane);
-        AddCurrencyButtonListener addCurrencyButtonListener =
-                (AddCurrencyButtonListener) applicationContext.getBean("addCurrencyButtonListener");
-        addCurrencyButtonListener.setInput(input);
-        addCurrencyButtonListener.setCurrencyTable(table);
-        currencyButton.addActionListener(addCurrencyButtonListener);
-        DeleteCurrencyButtonListener deleteCurrencyButtonListener =
-                (DeleteCurrencyButtonListener) applicationContext.getBean("deleteCurrencyButtonListener");
-        deleteCurrencyButtonListener.setCurrencyTable(table);
-        deleteButton.addActionListener(deleteCurrencyButtonListener);
+        jScrollPane.setViewportView(currencyTable);
+        add(jScrollPane, BorderLayout.CENTER);
+        currencyInputAndButtonPanel = new CurrencyInputAndButtonPanel(applicationContext);
+        currencyInputAndButtonPanel.getAddCurrencyButtonListener().setCurrencyTable(currencyTable);
+        currencyInputAndButtonPanel.getDeleteCurrencyButtonListener().setCurrencyTable(currencyTable);
+        add(currencyInputAndButtonPanel, BorderLayout.PAGE_START);
     }
 }
