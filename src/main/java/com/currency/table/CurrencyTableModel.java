@@ -1,19 +1,18 @@
 package com.currency.table;
 
 import com.currency.Currency;
+import org.springframework.stereotype.Component;
 import javax.swing.table.AbstractTableModel;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import static com.currency.table.CurrencyTableModel.CURRENCY_TABLE_MODEL;
 
+@Component(CURRENCY_TABLE_MODEL)
 public class CurrencyTableModel extends AbstractTableModel {
 
     private List<Currency> currencyList;
-    private List<String> columnsName = new ArrayList<>();
-
-    public CurrencyTableModel() {
-        columnsName.add("id");
-        columnsName.add("Currency_name");
-    }
+    private List<String> columnsName = Arrays.asList(new String[] {"id", "Currency name"});
+    public static final String CURRENCY_TABLE_MODEL = "currencyTableModel";
 
     @Override
     public int getRowCount() {
